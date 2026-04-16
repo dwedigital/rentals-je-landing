@@ -4,6 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rentals.je — Jersey's Rental Compliance Platform</title>
+
+  <!-- Google Consent Mode v2 — default to denied before GTM loads -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied'
+    });
+    // If user already accepted, grant immediately
+    if (localStorage.getItem('cookie_consent') === 'accepted') {
+      gtag('consent', 'update', { 'analytics_storage': 'granted' });
+    }
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PXL85J5D');</script>
   <meta name="description" content="Rentals.je helps Jersey landlords comply with the Residential Tenancy Amendment Law 2025 and gives tenants a better renting experience. Coming soon.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -232,6 +255,65 @@
       margin-top: 0.75rem;
     }
 
+    /* Cookie banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+      z-index: 1000;
+      display: none;
+    }
+    .cookie-banner.visible { display: block; }
+    .cookie-inner {
+      max-width: 72rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cookie-inner p {
+      font-size: 0.8125rem;
+      color: #374151;
+      line-height: 1.5;
+      flex: 1;
+      min-width: 16rem;
+      margin: 0;
+    }
+    .cookie-inner a { color: var(--accent); }
+    .cookie-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+    .cookie-buttons button {
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .cookie-accept {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .cookie-accept:hover { background: var(--accent-hover); }
+    .cookie-decline {
+      background: transparent;
+      color: #6b7280;
+      border: 1px solid #d1d5db;
+    }
+    .cookie-decline:hover { border-color: #9ca3af; color: #374151; }
+
     /* Footer */
     footer {
       background: var(--dark);
@@ -251,6 +333,10 @@
   </style>
 </head>
 <body>
+
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PXL85J5D"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <nav>
     <div class="nav-inner">
@@ -341,6 +427,31 @@
   <footer>
     <p>&copy; 2026 DWE Digital Ltd &mdash; <a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a></p>
   </footer>
+
+  <!-- Cookie consent banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-inner">
+      <p>We use cookies to understand how visitors use this site. No cookies are set until you accept. <a href="/privacy.html">Privacy Policy</a></p>
+      <div class="cookie-buttons">
+        <button class="cookie-decline" onclick="cookieResponse('declined')">Decline</button>
+        <button class="cookie-accept" onclick="cookieResponse('accepted')">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function cookieResponse(choice) {
+      localStorage.setItem('cookie_consent', choice);
+      document.getElementById('cookieBanner').classList.remove('visible');
+      if (choice === 'accepted') {
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      }
+    }
+    // Show banner if no choice has been made
+    if (!localStorage.getItem('cookie_consent')) {
+      document.getElementById('cookieBanner').classList.add('visible');
+    }
+  </script>
 
 </body>
 </html>
