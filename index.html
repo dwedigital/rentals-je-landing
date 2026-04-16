@@ -424,7 +424,7 @@
   <section class="notify" id="notify">
     <h2>Get notified when we launch</h2>
     <p>We're putting the finishing touches on Rentals.je. Leave your email and we'll let you know when it's live.</p>
-    <form class="notify-form" action="https://formspree.io/f/xnjljbrk" method="POST">
+    <form class="notify-form" id="notifyForm" action="https://formspree.io/f/xnjljbrk" method="POST">
       <input type="email" name="email" placeholder="you@example.com" required>
       <button type="submit">Notify me</button>
     </form>
@@ -458,6 +458,11 @@
     if (!localStorage.getItem('cookie_consent')) {
       document.getElementById('cookieBanner').classList.add('visible');
     }
+
+    // Track email sign-up as Lead event in Plausible
+    document.getElementById('notifyForm').addEventListener('submit', function() {
+      plausible('Lead');
+    });
   </script>
 
 </body>
