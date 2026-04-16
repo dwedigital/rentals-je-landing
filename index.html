@@ -460,8 +460,12 @@
     }
 
     // Track email sign-up as Lead event in Plausible
-    document.getElementById('notifyForm').addEventListener('submit', function() {
-      plausible('Lead');
+    document.getElementById('notifyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      plausible('Lead', {callback: function() { form.submit(); }});
+      // Fallback: submit after 1s if callback doesn't fire
+      setTimeout(function() { form.submit(); }, 1000);
     });
   </script>
 
